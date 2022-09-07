@@ -70,9 +70,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="BooksWebCatalog.asmx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BooksWebCatalog.asmx.cs">
+      <DependentUpon>BooksWebCatalog.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Data\Author.cs" />
     <Compile Include="Data\Book.cs" />
     <Compile Include="Data\BooksCatalog.cs" />
