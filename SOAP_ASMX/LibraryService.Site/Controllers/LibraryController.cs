@@ -6,23 +6,18 @@ using System.Diagnostics;
 
 namespace LibraryService.Site.Controllers
 {
-    public class HomeController : Controller
+    public class LibraryController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<LibraryController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public LibraryController(ILogger<LibraryController> logger)
         {
             _logger = logger;
         }
 
         public IActionResult Index()
         {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
+            return View(new BookCategoryViewModel());
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

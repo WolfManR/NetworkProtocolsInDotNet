@@ -1,0 +1,13 @@
+﻿@model LibraryService.Site.Models.BookCategoryViewModel
+
+<form asp-controller="Library" asp-action="Index">
+	<p>
+		<select asp-for="SearchType" asp-items="Html.GetEnumSelectList<SearchType>()">
+
+		</select>
+
+		<input type="text" name="SearchString" />
+
+		<input type="submit" value="Поиск" />
+	</p>
+</form>
