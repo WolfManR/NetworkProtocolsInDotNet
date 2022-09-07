@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace LibraryService.Data.Contexts
 {
@@ -15,7 +17,7 @@ namespace LibraryService.Data.Contexts
 
         private void Initialize()
         {
-
+            _data = JsonConvert.DeserializeObject<List<Book>>(Encoding.UTF8.GetString(Properties.Resources.books));
         }
     }
 }
