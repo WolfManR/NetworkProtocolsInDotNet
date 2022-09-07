@@ -70,6 +70,13 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Author.cs" />
+    <Compile Include="Data\Book.cs" />
+    <Compile Include="Data\BooksCatalog.cs" />
+    <Compile Include="Data\Contexts\BooksContext.cs" />
+    <Compile Include="Data\Contexts\IBooksContext.cs" />
+    <Compile Include="Data\IBooksCatalog.cs" />
+    <Compile Include="Data\ICatalog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -93,6 +100,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
