@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.Mvc;
 
 using System.Diagnostics;
+using LibraryServiceReference;
 
 namespace LibraryService.Site.Controllers
 {
@@ -15,8 +16,27 @@ namespace LibraryService.Site.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(SearchType searchType, string? searchString)
         {
+            using var client = new BooksWebCatalogSoapClient(BooksWebCatalogSoapClient.EndpointConfiguration.BooksWebCatalogSoap);
+            try
+            {
+                if (searchString is not { Length: >= 3 }) return View(new BookCategoryViewModel());
+
+                var books = searchType switch
+                {
+                    SearchType.Title => client.GetBooksByTitle(searchString),
+                    SearchType.Category => client.GetBooksByCategory(searchString),
+                    SearchType.Author => client.GetBooksByAuthor(searchString),
+                    _ => Array.Empty<Book>()
+                };
+
+                return View(new BookCategoryViewModel { Books = books });
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error");
+            }
             return View(new BookCategoryViewModel());
         }
 
