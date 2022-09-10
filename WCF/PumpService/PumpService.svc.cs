@@ -1,6 +1,7 @@
 ﻿using PumpService.App_Data;
 
 using System.ServiceModel;
+using PumpService.Scripting;
 
 namespace PumpService
 {
@@ -9,14 +10,26 @@ namespace PumpService
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession)]
     public class PumpService : IPumpService
     {
+        private readonly IScriptService _scriptService;
+        private readonly IScriptConfiguration _scriptConfiguration;
+
+        public PumpService()
+        {
+            _scriptConfiguration = new ScriptConfiguration();
+            _scriptService = new ScriptService(Callback, _scriptConfiguration);
+        }
+
         IPumpServiceCallback Callback => OperationContext.Current?.GetCallbackChannel<IPumpServiceCallback>();
 
         public void RunScript()
         {
+            _scriptService.Run(10);
         }
 
         public void UpdateAndCompileScript(string fileName)
         {
+            _scriptConfiguration.FileName = fileName;
+            _scriptService.Compile();
         }
     }
 }
