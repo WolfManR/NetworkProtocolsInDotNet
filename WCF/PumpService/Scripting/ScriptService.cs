@@ -3,6 +3,8 @@ using System.CodeDom.Compiler;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.CSharp;
 using PumpService.App_Data;
 
@@ -50,6 +52,33 @@ namespace PumpService.Scripting
 
         public void Run(int count)
         {
+            if (_compilerResults == null || _compilerResults.Errors.HasErrors)
+            {
+                if(!Compile()) return;
+            }
+            
+            Type t = _compilerResults?.CompiledAssembly.GetType("Sample.SampleScript");
+            MethodInfo entryPointMethod = t?.GetMethod("EntryPoint");
+            if(entryPointMethod is null) return;
+
+            Task.Run(() =>
+            {
+                for (var i = 0; i < count; i++)
+                {
+                    if ((bool)entryPointMethod.Invoke(Activator.CreateInstance(t), null))
+                    {
+                        _statistics.SuccessTacts++;
+                    }
+                    else
+                    {
+                        _statistics.ErrorTacts++;
+                    }
+
+                    _statistics.AllTacts++;
+                    _callback.UpdateStatistics(_statistics);
+                    Thread.Sleep(1000);
+                }
+            });
         }
 
         private static string LoadFile(string fileName)
