@@ -9,7 +9,86 @@
 //------------------------------------------------------------------------------
 
 namespace PumpConsoleClient.PumpServiceReference {
+    using System.Runtime.Serialization;
+    using System;
     
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Statistics", Namespace="http://schemas.datacontract.org/2004/07/PumpService.App_Data")]
+    [System.SerializableAttribute()]
+    public partial class Statistics : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int AllTactsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int ErrorTactsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int SuccessTactsField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int AllTacts {
+            get {
+                return this.AllTactsField;
+            }
+            set {
+                if ((this.AllTactsField.Equals(value) != true)) {
+                    this.AllTactsField = value;
+                    this.RaisePropertyChanged("AllTacts");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int ErrorTacts {
+            get {
+                return this.ErrorTactsField;
+            }
+            set {
+                if ((this.ErrorTactsField.Equals(value) != true)) {
+                    this.ErrorTactsField = value;
+                    this.RaisePropertyChanged("ErrorTacts");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int SuccessTacts {
+            get {
+                return this.SuccessTactsField;
+            }
+            set {
+                if ((this.SuccessTactsField.Equals(value) != true)) {
+                    this.SuccessTactsField = value;
+                    this.RaisePropertyChanged("SuccessTacts");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="PumpServiceReference.IPumpService", CallbackContract=typeof(PumpConsoleClient.PumpServiceReference.IPumpServiceCallback), SessionMode=System.ServiceModel.SessionMode.Required)]
@@ -32,7 +111,7 @@ namespace PumpConsoleClient.PumpServiceReference {
     public interface IPumpServiceCallback {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IPumpService/UpdateStatistics", ReplyAction="http://tempuri.org/IPumpService/UpdateStatisticsResponse")]
-        void UpdateStatistics(object statistics);
+        void UpdateStatistics(PumpConsoleClient.PumpServiceReference.Statistics statistics);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]

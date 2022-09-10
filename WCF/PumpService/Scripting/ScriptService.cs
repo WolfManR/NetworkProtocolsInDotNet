@@ -14,7 +14,7 @@ namespace PumpService.Scripting
     {
         private readonly IPumpServiceCallback _callback;
         private readonly IScriptConfiguration _configuration;
-        private readonly IStatistics _statistics;
+        private readonly Statistics _statistics;
 
         private CompilerResults _compilerResults;
 

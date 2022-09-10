@@ -62,6 +62,9 @@
     <None Include="Connected Services\PumpServiceReference\PumpService1.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\PumpServiceReference\PumpService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
