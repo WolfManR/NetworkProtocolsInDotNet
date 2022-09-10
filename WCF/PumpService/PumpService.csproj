@@ -67,11 +67,16 @@
   <ItemGroup>
     <Compile Include="App_Data\IPumpServiceCallback.cs" />
     <Compile Include="App_Data\IStatistics.cs" />
+    <Compile Include="App_Data\Statistics.cs" />
     <Compile Include="IPumpService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PumpService.svc.cs">
       <DependentUpon>PumpService.svc</DependentUpon>
     </Compile>
+    <Compile Include="Scripting\IScriptConfiguration.cs" />
+    <Compile Include="Scripting\IScriptService.cs" />
+    <Compile Include="Scripting\ScriptConfiguration.cs" />
+    <Compile Include="Scripting\ScriptService.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
