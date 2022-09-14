@@ -1,4 +1,6 @@
+using ClinicService.Data;
 using ClinicService.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddGrpc();
+
+builder.Services.AddDbContext<ClinicContext>((provider, options) => options
+    .UseLazyLoadingProxies()
+    .UseSqlServer(provider.GetRequiredService<IConfiguration>()["Settings:DatabaseOptions:ConnectionString"]));
 
 var app = builder.Build();
 
