@@ -4,9 +4,9 @@ namespace ClinicService.Data.Storage;
 
 public class BaseRepository<T,TId> : IRepository<T, TId> where T : class, IEntity<TId>
 {
-    private readonly ClinicContext _context;
+    protected readonly ClinicContext _context;
 
-    public BaseRepository(ClinicContext context)
+    protected BaseRepository(ClinicContext context)
     {
         _context = context;
     }
@@ -18,7 +18,7 @@ public class BaseRepository<T,TId> : IRepository<T, TId> where T : class, IEntit
         return item.Id;
     }
 
-    public void Update(T item)
+    public virtual void Update(T item)
     {
         _context.Attach(item).State = EntityState.Modified;
         try
