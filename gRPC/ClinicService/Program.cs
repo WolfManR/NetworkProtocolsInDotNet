@@ -1,4 +1,5 @@
 using ClinicService.Data;
+using ClinicService.Data.Storage;
 using ClinicService.Services;
 
 using Microsoft.AspNetCore.HttpLogging;
@@ -14,9 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddGrpc();
 
-builder.Services.AddDbContext<ClinicContext>((provider, options) => options
-    .UseLazyLoadingProxies()
-    .UseSqlServer(provider.GetRequiredService<IConfiguration>()["Settings:DatabaseOptions:ConnectionString"]));
+RegisterData(builder.Services);
 
 ConfigureLogs(builder.Services, builder.Host);
 
@@ -54,4 +53,16 @@ static void ConfigureLogs(IServiceCollection services, IHostBuilder host)
         logging.AddConsole();
 
     }).UseNLog(new NLogAspNetCoreOptions() { RemoveLoggerFactoryFilter = true });
+}
+
+static void RegisterData(IServiceCollection services)
+{
+    services.AddDbContext<ClinicContext>((provider, options) => options
+        .UseLazyLoadingProxies()
+        .UseSqlServer(provider.GetRequiredService<IConfiguration>()["Settings:DatabaseOptions:ConnectionString"]));
+
+    services
+        .AddScoped<IPetRepository, PetRepository>()
+        .AddScoped<IConsultationRepository, ConsultationRepository>()
+        .AddScoped<IClientRepository, ClientRepository>();
 }

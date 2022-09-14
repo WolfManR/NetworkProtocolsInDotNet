@@ -1,6 +1,6 @@
 ﻿namespace ClinicService.Data;
 
-public class Consultation
+public class Consultation : IEntity<int>
 {
     public int Id { get; set; }
 

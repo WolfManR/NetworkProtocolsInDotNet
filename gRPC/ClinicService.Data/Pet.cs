@@ -1,6 +1,6 @@
 ﻿namespace ClinicService.Data;
 
-public class Pet
+public class Pet : IEntity<int>
 {
     public int Id { get; set; }
 
