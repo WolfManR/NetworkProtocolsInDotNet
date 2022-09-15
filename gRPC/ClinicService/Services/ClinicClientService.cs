@@ -78,7 +78,9 @@ public class ClinicClientService : ClinicClientServiceBase
     {
         var clients = _clientRepository.GetAll();
         if (clients.Count <= 0) return Task.FromResult(new GetClientsResponse());
-        return Task.FromResult(new GetClientsResponse { Clients = { clients.Select(c => Map(c)) } });
+        GetClientsResponse response = new();
+        response.Clients.AddRange(clients.Select(c => Map(c)));
+        return Task.FromResult(response);
     }
 
     private static ClientResponse Map(Client data) => new()
