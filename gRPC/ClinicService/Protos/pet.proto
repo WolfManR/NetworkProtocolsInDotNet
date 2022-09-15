@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+option csharp_namespace = "ClinicServiceProtos";
+
+package ClinicServiceProtos;
+
+import "google/protobuf/timestamp.proto";
+
+service ClinicPetService{
+	rpc CreatePet (CreatePetRequest) returns (CreatePetResponse);
+	rpc UpdatePet (UpdatePetRequest) returns (UpdatePetResponse);
+	rpc DeletePet (DeletePetRequest) returns (DeletePetResponse);
+	rpc GetPetById (GetPetByIdRequest) returns (PetResponse);
+	rpc GetPets (GetPetsRequest) returns (GetPetsResponse);
+}
+
+message CreatePetRequest{
+	string name = 1;
+	google.protobuf.Timestamp birthday = 2;
+}
+
+message CreatePetResponse{
+	int32 petId = 1;
+}
+
+message UpdatePetRequest {
+    int32 petId = 1;
+    string name = 2;
+    google.protobuf.Timestamp birthday = 3;
+}
+
+message UpdatePetResponse {
+}
+
+message DeletePetRequest {
+    int32 petId = 1;
+}
+
+message DeletePetResponse {
+}
+
+message GetPetByIdRequest {
+    int32 petId = 1;
+}
+
+message GetPetsRequest{
+}
+
+message GetPetsResponse{
+    repeated PetResponse pets = 1;
+}
+
+message PetResponse {
+	int32 petId = 1;
+    string name = 2;
+    google.protobuf.Timestamp birthday = 3;
+}

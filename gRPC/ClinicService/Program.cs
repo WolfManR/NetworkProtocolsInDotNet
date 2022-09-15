@@ -16,9 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddGrpc();
 
 RegisterData(builder.Services);
-
 ConfigureLogs(builder.Services, builder.Host);
-
 
 var app = builder.Build();
 
@@ -29,6 +27,7 @@ app.UseWhen(
     b => b.UseHttpLogging());
 
 app.MapGrpcService<ClinicClientService>();
+app.MapGrpcService<ClinicPetService>();
 app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 
 app.Run();

@@ -67,19 +67,15 @@ public class ClinicClientService : ClinicClientServiceBase
     public override Task<ClientResponse> GetClientById(GetClientByIdRequest request, ServerCallContext context)
     {
         var entity = _clientRepository.GetById(request.ClientId);
-        if (entity is null) return Task.FromResult<ClientResponse>(new());
-
-        ClientResponse response = Map(entity);
-
+        ClientResponse response = entity is null ? new() : Map(entity);
         return Task.FromResult(response);
     }
 
     public override Task<GetClientsResponse> GetClients(GetClientsRequest request, ServerCallContext context)
     {
-        var clients = _clientRepository.GetAll();
-        if (clients.Count <= 0) return Task.FromResult(new GetClientsResponse());
+        var entities = _clientRepository.GetAll();
         GetClientsResponse response = new();
-        response.Clients.AddRange(clients.Select(c => Map(c)));
+        if (entities.Count > 0) response.Clients.AddRange(entities.Select(e => Map(e)));
         return Task.FromResult(response);
     }
 
