@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="..\ClinicService\Protos\clinic.proto" Link="Protos\clinic.proto" GrpcServices="Client" />
+    <Protobuf Include="..\ClinicService\Protos\client.proto" Link="Protos\client.proto" GrpcServices="Client" />
   </ItemGroup>
 
   <ItemGroup>
