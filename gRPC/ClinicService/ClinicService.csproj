@@ -32,4 +32,9 @@
     <ProjectReference Include="..\ClinicService.Data\ClinicService.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+    <Folder Include="Utils\" />
+  </ItemGroup>
+
 </Project>
