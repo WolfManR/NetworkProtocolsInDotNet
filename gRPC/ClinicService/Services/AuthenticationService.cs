@@ -20,9 +20,31 @@ public class AuthenticationService : IAuthenticationService
         _serviceScopeFactory = serviceScopeFactory;
     }
 
-    public SessionContext GetSessionInfo(string sessionToken)
+    public SessionContext? GetSessionInfo(string sessionToken)
     {
-        throw new NotImplementedException();
+        SessionContext? sessionContext;
+
+        lock (_sessions)
+        {
+            _sessions.TryGetValue(sessionToken, out sessionContext);
+        }
+
+        if (sessionContext is not null) return sessionContext;
+
+        using var scope = _serviceScopeFactory.CreateScope();
+        using var context = scope.ServiceProvider.GetRequiredService<ClinicContext>();
+
+        AccountSession? session = context.AccountSessions.FirstOrDefault(s => s.Token == sessionToken);
+        if (session is null) return null;
+        
+        sessionContext = GetSessionContext(session.Account, session);
+
+        lock (_sessions)
+        {
+            _sessions[sessionContext.SessionToken] = sessionContext;
+        }
+
+        return sessionContext;
     }
 
     public AuthenticationResponse Login(AuthenticationRequest authenticationRequest)
