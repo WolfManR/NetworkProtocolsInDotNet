@@ -47,17 +47,17 @@ public class AuthenticationService : IAuthenticationService
         return sessionContext;
     }
 
-    public AuthenticationResponse Login(AuthenticationRequest authenticationRequest)
+    public AuthenticationResult Login(string login, string password)
     {
         using IServiceScope scope = _serviceScopeFactory.CreateScope();
         using var context = scope.ServiceProvider.GetRequiredService<ClinicContext>();
 
-        Account? account = FindAccountByLogin(context, authenticationRequest.Login);
-        if (account == null) return AuthenticationResponse.UserNotFound();
+        Account? account = FindAccountByLogin(context, login);
+        if (account == null) return AuthenticationResult.UserNotFound();
 
-        if (!PasswordUtils.VerifyPassword(authenticationRequest.Password, account.PasswordSalt, account.PasswordHash))
+        if (!PasswordUtils.VerifyPassword(password, account.PasswordSalt, account.PasswordHash))
         {
-            return AuthenticationResponse.InvalidPassword();
+            return AuthenticationResult.InvalidPassword();
         }
 
         AccountSession session = new()
@@ -79,7 +79,7 @@ public class AuthenticationService : IAuthenticationService
             _sessions[sessionContext.SessionToken] = sessionContext;
         }
 
-        return AuthenticationResponse.Success(sessionContext);
+        return AuthenticationResult.Success(sessionContext);
     }
 
     private static SessionContext GetSessionContext(Account account, AccountSession accountSession)

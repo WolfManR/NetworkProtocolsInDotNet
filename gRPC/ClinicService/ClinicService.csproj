@@ -7,11 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Protos\auth.proto" />
-    <None Remove="Protos\pet.proto" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Protobuf Include="Protos\auth.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\client.proto" GrpcServices="Server" />
     <Protobuf Include="Protos\pet.proto" GrpcServices="Server" />
@@ -34,9 +29,5 @@
     <ProjectReference Include="..\ClinicService.Data\ClinicService.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="Utils\" />
-  </ItemGroup>
 
 </Project>
