@@ -6,11 +6,12 @@ using ClinicService.Data.Storage;
 using ClinicServiceProtos;
 
 using Grpc.Core;
-
+using Microsoft.AspNetCore.Authorization;
 using static ClinicServiceProtos.ClinicClientService;
 
 namespace ClinicService.Services;
 
+[Authorize]
 public class ClinicClientService : ClinicClientServiceBase
 {
     private readonly IClientRepository _clientRepository;

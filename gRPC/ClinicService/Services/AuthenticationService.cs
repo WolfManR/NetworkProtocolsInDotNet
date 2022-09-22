@@ -5,12 +5,14 @@ using System.Security.Claims;
 using System.Text;
 using ClinicService.Models;
 using ClinicService.Utils;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ClinicService.Services;
 
+[Authorize]
 public class AuthenticationService : IAuthenticationService
 {
-    private const string TokenSecretKey = "kYp3s6v9y/B?E(H+";
+    public const string TokenSecretKey = "kYp3s6v9y/B?E(H+";
 
     private readonly IServiceScopeFactory _serviceScopeFactory;
     private readonly Dictionary<string, SessionContext> _sessions = new();
@@ -47,6 +49,7 @@ public class AuthenticationService : IAuthenticationService
         return sessionContext;
     }
 
+    [AllowAnonymous]
     public AuthenticationResult Login(string login, string password)
     {
         using IServiceScope scope = _serviceScopeFactory.CreateScope();
