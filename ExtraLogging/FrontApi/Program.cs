@@ -29,6 +29,8 @@ builder.Host.ConfigureLogging(logging =>
 
 }).UseNLog(new NLogAspNetCoreOptions() { RemoveLoggerFactoryFilter = true });
 
+builder.Services.AddHttpClientLogging();
+
 builder.Services.AddHttpClient<RootApiClient>();
 
 var app = builder.Build();
