@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.Mvc;
 
 using NLog.Web;
+using Polly;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,7 +32,16 @@ builder.Host.ConfigureLogging(logging =>
 
 builder.Services.AddHttpClientLogging();
 
-builder.Services.AddHttpClient<RootApiClient>();
+builder.Services.AddHttpClient<RootApiClient>()
+    .AddTransientHttpErrorPolicy(p => p.WaitAndRetryAsync(retryCount: 3,
+    sleepDurationProvider: (attemptCount) => TimeSpan.FromSeconds(attemptCount * 2),
+    onRetry: (response, sleepDuration, attemptNumber, context) =>
+    {
+        var logger = builder.Services.BuildServiceProvider().GetService<ILogger<Program>>();
+        logger?.LogError(
+            response.Exception ?? new Exception($"\n{response.Result.StatusCode}: {response.Result.RequestMessage}"),
+            "(attempt: {attemptNumber}) RootServiceClient request exception.", attemptNumber);
+    }));
 
 var app = builder.Build();
 
