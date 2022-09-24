@@ -15,6 +15,9 @@ public class ClinicContext : DbContext
     public virtual DbSet<Pet> Pets { get; set; } = null!;
     public virtual DbSet<Consultation> Consultations { get; set; } = null!;
 
+    public virtual DbSet<Account> Accounts { get; set; } = null!;
+    public virtual DbSet<AccountSession> AccountSessions { get; set; } = null!;
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -46,6 +49,27 @@ public class ClinicContext : DbContext
             b.HasOne(t => t.Client)
              .WithMany(t => t.Pets)
              .HasForeignKey(t => t.ClientId);
+        });
+
+        modelBuilder.Entity<Account>(b =>
+        {
+            b.Property(t => t.Email).HasMaxLength(255);
+
+            b.Property(t => t.PasswordSalt).HasMaxLength(100);
+            b.Property(t => t.PasswordHash).HasMaxLength(100);
+
+            b.Property(t => t.FirstName).HasMaxLength(255);
+            b.Property(t => t.LastName).HasMaxLength(255);
+            b.Property(t => t.SecondName).HasMaxLength(255);
+        });
+
+        modelBuilder.Entity<AccountSession>(b =>
+        {
+            b.Property(t => t.Token).HasMaxLength(384);
+
+            b.HasOne(t => t.Account)
+             .WithMany(t => t.Sessions)
+             .HasForeignKey(t => t.AccountId);
         });
     }
 }
