@@ -6,11 +6,12 @@ using ClinicServiceProtos;
 using Google.Protobuf.WellKnownTypes;
 
 using Grpc.Core;
-
+using Microsoft.AspNetCore.Authorization;
 using static ClinicServiceProtos.ClinicPetService;
 
 namespace ClinicService.Services;
 
+[Authorize]
 public class ClinicPetService : ClinicPetServiceBase
 {
     private readonly IPetRepository _repository;

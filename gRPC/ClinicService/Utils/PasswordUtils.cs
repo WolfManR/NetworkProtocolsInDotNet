@@ -34,7 +34,7 @@ public class PasswordUtils
         byte[] buffer = Encoding.UTF8.GetBytes(password);
 
         // compute hash 
-        SHA512 sha512 = new SHA512Managed();
+        SHA512 sha512 = SHA512.Create();
         byte[] passwordHash = sha512.ComputeHash(buffer);
 
         // done

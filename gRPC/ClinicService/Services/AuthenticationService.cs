@@ -5,12 +5,14 @@ using System.Security.Claims;
 using System.Text;
 using ClinicService.Models;
 using ClinicService.Utils;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ClinicService.Services;
 
+[Authorize]
 public class AuthenticationService : IAuthenticationService
 {
-    private const string TokenSecretKey = "kYp3s6v9y/B?E(H+";
+    public const string TokenSecretKey = "kYp3s6v9y/B?E(H+";
 
     private readonly IServiceScopeFactory _serviceScopeFactory;
     private readonly Dictionary<string, SessionContext> _sessions = new();
@@ -20,22 +22,45 @@ public class AuthenticationService : IAuthenticationService
         _serviceScopeFactory = serviceScopeFactory;
     }
 
-    public SessionContext GetSessionInfo(string sessionToken)
+    public SessionContext? GetSessionInfo(string sessionToken)
     {
-        throw new NotImplementedException();
+        SessionContext? sessionContext;
+
+        lock (_sessions)
+        {
+            _sessions.TryGetValue(sessionToken, out sessionContext);
+        }
+
+        if (sessionContext is not null) return sessionContext;
+
+        using var scope = _serviceScopeFactory.CreateScope();
+        using var context = scope.ServiceProvider.GetRequiredService<ClinicContext>();
+
+        AccountSession? session = context.AccountSessions.FirstOrDefault(s => s.Token == sessionToken);
+        if (session is null) return null;
+        
+        sessionContext = GetSessionContext(session.Account, session);
+
+        lock (_sessions)
+        {
+            _sessions[sessionContext.SessionToken] = sessionContext;
+        }
+
+        return sessionContext;
     }
 
-    public AuthenticationResponse Login(AuthenticationRequest authenticationRequest)
+    [AllowAnonymous]
+    public AuthenticationResult Login(string login, string password)
     {
         using IServiceScope scope = _serviceScopeFactory.CreateScope();
         using var context = scope.ServiceProvider.GetRequiredService<ClinicContext>();
 
-        Account? account = FindAccountByLogin(context, authenticationRequest.Login);
-        if (account == null) return AuthenticationResponse.UserNotFound();
+        Account? account = FindAccountByLogin(context, login);
+        if (account == null) return AuthenticationResult.UserNotFound();
 
-        if (!PasswordUtils.VerifyPassword(authenticationRequest.Password, account.PasswordSalt, account.PasswordHash))
+        if (!PasswordUtils.VerifyPassword(password, account.PasswordSalt, account.PasswordHash))
         {
-            return AuthenticationResponse.InvalidPassword();
+            return AuthenticationResult.InvalidPassword();
         }
 
         AccountSession session = new()
@@ -57,7 +82,7 @@ public class AuthenticationService : IAuthenticationService
             _sessions[sessionContext.SessionToken] = sessionContext;
         }
 
-        return AuthenticationResponse.Success(sessionContext);
+        return AuthenticationResult.Success(sessionContext);
     }
 
     private static SessionContext GetSessionContext(Account account, AccountSession accountSession)
