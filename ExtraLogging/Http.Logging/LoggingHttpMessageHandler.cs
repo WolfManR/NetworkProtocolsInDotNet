@@ -113,7 +113,7 @@ public class LoggingHttpMessageHandler : DelegatingHandler
         else
         {
             // append log 
-            requestText.AppendLine("RequestBody: <Not Logged>");
+            requestText.AppendLine($"RequestBody: <{(request.Content is null ? "Empty" : "Not Logged")}>");
         }
 
         // tracing output
@@ -126,7 +126,7 @@ public class LoggingHttpMessageHandler : DelegatingHandler
         if (!Logger.IsEnabled(LogLevel.Trace)) return;
 
         // tracing response
-        StringBuilder responseText = new StringBuilder();
+        StringBuilder responseText = new();
         responseText.AppendLine($"Response #{correlationId}");
         responseText.AppendLine($"Elapsed: {receivingTime}ms");
         responseText.AppendLine($"StatusCode: {(int)response.StatusCode} {response.ReasonPhrase}");
